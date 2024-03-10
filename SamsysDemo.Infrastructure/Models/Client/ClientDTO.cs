@@ -10,6 +10,7 @@ namespace SamsysDemo.Infrastructure.Models.Client
     {
         public long Id { get; set; }
         public string Name { get; set; } = string.Empty;
+        public DateTime DateOfBirth { get; set; }
         public bool IsActive { get; set; }
         public string PhoneNumber { get; set; } = string.Empty;
         public string ConcurrencyToken { get; set; } = string.Empty;
