@@ -21,6 +21,42 @@ namespace SamsysDemo.BLL.Services
             _unitOfWork = unitOfWork;
         }
 
+        public async Task<MessagingHelper<ClientDTO>> Create(ClientDTO newClient)
+        {
+            MessagingHelper<ClientDTO> response = new();
+            try
+            {
+                Client clientEntity = new Client
+                {
+                    Name = newClient.Name,
+                    PhoneNumber = newClient.PhoneNumber,
+                    IsActive = newClient.IsActive,
+                    DateOfBirth = newClient.DateOfBirth,
+                };
+
+                await _unitOfWork.ClientRepository.Insert(clientEntity);
+                await _unitOfWork.SaveAsync();
+
+                response.Obj = new ClientDTO
+                {
+                    Id = clientEntity.Id,
+                    IsActive = clientEntity.IsActive,
+                    ConcurrencyToken = Convert.ToBase64String(clientEntity.ConcurrencyToken),
+                    Name = clientEntity.Name,
+                    PhoneNumber = clientEntity.PhoneNumber,
+                    DateOfBirth = clientEntity.DateOfBirth,
+                };
+                response.Success = true;
+                return response;
+            }
+            catch(Exception ex)
+            {
+                response.Success = false;
+                response.SetMessage($"Ocorreu um erro ao criar um novo cliente.");
+                return response;
+            }
+        }
+
         public async Task<MessagingHelper<IEnumerable<ClientDTO>>> GetAll()
         {
             MessagingHelper<IEnumerable<ClientDTO>> response = new();

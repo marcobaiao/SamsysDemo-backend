@@ -20,6 +20,13 @@ namespace SamsysDemo.DAL.Repositories
             _context = context;
         }     
 
+        public async Task<Client> Create(Client entityToCreate)
+        {
+            await Insert(entityToCreate);
+            await _context.SaveChangesAsync();
+            return entityToCreate;
+        }
+
         public async Task<IEnumerable<Client>> GetAll()
         {
             return await _context.Clients.ToListAsync();

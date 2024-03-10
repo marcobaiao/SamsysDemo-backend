@@ -17,6 +17,13 @@ namespace SamsysDemo.Controllers
             _clientService = clientService;
         }
 
+        [HttpPost]
+        public async Task<ActionResult<MessagingHelper<ClientDTO>>> Create(ClientDTO newClient)
+        {
+            return await _clientService.Create(newClient);
+        }
+
+
         [HttpGet("all")]
         public async Task<ActionResult<MessagingHelper<IEnumerable<ClientDTO>>>> GetAll()
         {
