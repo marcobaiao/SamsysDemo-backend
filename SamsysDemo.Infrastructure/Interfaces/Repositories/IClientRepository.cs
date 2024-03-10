@@ -11,6 +11,7 @@ namespace SamsysDemo.Infrastructure.Interfaces.Repositories
 {
     public interface IClientRepository 
     {           
+        Task<IEnumerable<Client>> GetAll();
         Task<Client?> GetById(object id, string[]? includedProperties = null);
         Task Insert(Client entityToInsert);
         void Update(Client entityToUpdate, string concurrencyToken);

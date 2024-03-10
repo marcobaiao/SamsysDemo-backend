@@ -12,8 +12,6 @@ using System.Threading.Tasks;
 
 namespace SamsysDemo.BLL.Services
 {
-
-
     public class ClientService
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -21,6 +19,40 @@ namespace SamsysDemo.BLL.Services
         public ClientService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
+        }
+
+        public async Task<MessagingHelper<IEnumerable<ClientDTO>>> GetAll()
+        {
+            MessagingHelper<IEnumerable<ClientDTO>> response = new();
+            try
+            {
+                IEnumerable<Client> clients = await _unitOfWork.ClientRepository.GetAll();
+
+                if(clients == null || !clients.Any())
+                {
+                    response.SetMessage($"Não existem clientes.");
+                    response.Success = false;
+                    return response;
+                }
+
+                IEnumerable<ClientDTO> clientDTOs = clients.Select(client => new ClientDTO {
+                    Id = client.Id,
+                    IsActive = client.IsActive,
+                    ConcurrencyToken = Convert.ToBase64String(client.ConcurrencyToken),
+                    Name = client.Name,
+                    DateOfBirth = client.DateOfBirth,
+                    PhoneNumber = client.PhoneNumber,
+                });
+                response.Obj = clientDTOs;
+                response.Success = true;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.SetMessage($"Ocorreu um erro inesperado ao obter o cliente.");
+                return response;
+            }
         }
 
 

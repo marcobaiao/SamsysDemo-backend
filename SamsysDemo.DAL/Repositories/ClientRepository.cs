@@ -20,6 +20,11 @@ namespace SamsysDemo.DAL.Repositories
             _context = context;
         }     
 
+        public async Task<IEnumerable<Client>> GetAll()
+        {
+            return await _context.Clients.ToListAsync();
+        }
+
         public async Task Delete(object id, string userDelete, string concurrencyToken)
         {
             Client? entityToDelete = await _context.Clients.FindAsync(id);
